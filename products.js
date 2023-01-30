@@ -590,21 +590,21 @@ const authenticate = (req,res,next)=>{
     const [scheme,token] = ftoken.split(" ")
     if(scheme==="Bearer"){
           if(token ==="" || token ===undefined || token ===null){
-            return res.send(401)
+            return res.status(401)
         }
 
         if(token !=="" || token !==undefined || token !==null){
           console.log(token)
             next()
-          res.send(200)
+          res.status(200)
         }
     }else{
-        return res(401)
+        return res.status(401)
     }
 }
 
 app.get('/products/',authenticate,(req,res)=>{
-    res.send(data.products)
+    res.status(200).json(data.products)
 
 })
 
@@ -612,12 +612,12 @@ app.get('/products/:id',authenticate,(req,res)=>{
     const id = parseInt(req.params.id)
     console.log("id chache",id)
     const isProduct = data.products.find(products=>products.id===id)
-    res.send(isProduct)
+    res.status(200).json(isProduct)
 })
 
 app.get('/brands/',authenticate,(req,res)=>{
     const allBrands = data.products.map(products=>products.brand)
-    res.send(allBrands)
+    res.status(200).json(allBrands)
 })
 
 
