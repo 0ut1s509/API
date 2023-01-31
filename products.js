@@ -585,21 +585,19 @@ const data = {
 };
 
 const authenticate = (req,res,next)=>{
-    console.log(req.headers)
     const ftoken =req.headers.authorization 
     const [scheme,token] = ftoken.split(" ")
     if(scheme==="Bearer"){
           if(token ==="" || token ===undefined || token ===null){
-            return res.status(401)
+            return res.sendStatus(401)
         }
 
         if(token !=="" || token !==undefined || token !==null){
-          console.log(token)
             next()
-          res.status(200)
+          res.sendStatus(200)
         }
     }else{
-        return res.status(401)
+        return res.sendStatus(401)
     }
 }
 
@@ -610,7 +608,6 @@ app.get('/products/',authenticate,(req,res)=>{
 
 app.get('/products/:id',authenticate,(req,res)=>{
     const id = parseInt(req.params.id)
-    console.log("id chache",id)
     const isProduct = data.products.find(products=>products.id===id)
     res.status(200).json(isProduct)
 })
