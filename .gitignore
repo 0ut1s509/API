@@ -4,3 +4,5 @@ blog.js
 package-lock.json
 server.js
 node_modules
+parkings.json
+reservation.json

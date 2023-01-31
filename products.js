@@ -601,6 +601,19 @@ const authenticate = (req,res,next)=>{
     }
 }
 
+app.use((req,res,next)=>{
+  const allowedOrigins = ['http://localhost:8000','http://localhost:9007']
+  const origin = req.headers.origin
+
+  if (allowedOrigins.includes(origin)){
+    res.setHeader("Access-Control-Allow-Origin",origin)
+    res.setHeader("Acces-Control-Allow-Methods","GET")
+    next()
+  }else{
+    return res.sendStatus(401)
+  }
+})
+
 app.get('/products/',authenticate,(req,res)=>{
     res.status(200).json(data.products)
 
