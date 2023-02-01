@@ -587,13 +587,20 @@ const data = {
 const authenticate = (req,res,next)=>{
     const ftoken =req.headers.authorization 
     const [scheme,token] = ftoken.split(" ")
+    const allowedOrigins = ['http://localhost:8000','http://localhost:9007']
+    const origin = req.headers.origin
     if(scheme==="Bearer"){
           if(token ==="" || token ===undefined || token ===null){
             return res.sendStatus(401)
         }
 
         if(token !=="" || token !==undefined || token !==null){
+          if (allowedOrigins.includes(origin)){
+            res.set("Access-Control-Allow-Origin",origin)
+            res.set("Acces-Control-Allow-Methods","GET")
             next()
+
+          }
           res.sendStatus(200)
         }
     }else{
@@ -601,18 +608,14 @@ const authenticate = (req,res,next)=>{
     }
 }
 
-app.use((req,res,next)=>{
-  const allowedOrigins = ['http://localhost:8000','http://localhost:9007']
-  const origin = req.headers.origin
+// app.use((req,res,next)=>{
 
-  if (allowedOrigins.includes(origin)){
-    res.setHeader("Access-Control-Allow-Origin",origin)
-    res.setHeader("Acces-Control-Allow-Methods","GET")
-    next()
-  }else{
-    return res.sendStatus(401)
-  }
-})
+//   console.log(origin)
+//   console.log(allowedOrigins.includes(origin))
+
+//   next()
+
+// })
 
 app.get('/products/',authenticate,(req,res)=>{
     res.status(200).json(data.products)
